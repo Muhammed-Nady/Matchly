@@ -16,6 +16,7 @@ namespace Matchly
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddCors();
 
 
 
@@ -37,6 +38,12 @@ namespace Matchly
 
             app.UseAuthorization();
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
 
             app.MapControllers();
 
