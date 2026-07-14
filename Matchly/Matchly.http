@@ -1,0 +1,6 @@
+@Matchly_HostAddress = http://localhost:5105
+
+GET {{Matchly_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
