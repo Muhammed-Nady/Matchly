@@ -1,5 +1,10 @@
 using Matchly.Data;
+using Matchly.Interfaces;
+using Matchly.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Matchly
 {
@@ -17,6 +22,18 @@ namespace Matchly
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddCors();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                            .AddJwtBearer(options =>
+                            {
+                                options.TokenValidationParameters = new TokenValidationParameters
+                                {
+                                    ValidateIssuerSigningKey = true,
+                                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+                                    ValidateIssuer = false,
+                                    ValidateAudience = false
+                                };
+                            });
 
 
 
@@ -35,6 +52,8 @@ namespace Matchly
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
