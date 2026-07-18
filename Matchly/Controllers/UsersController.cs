@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Matchly.Controllers
 {
-    [Authorize] 
+    [AllowAnonymous]
     public class UsersController : BaseApiController
     {
         private readonly AppDbContext _context;
