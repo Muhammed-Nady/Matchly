@@ -1,5 +1,6 @@
 using Matchly.Data;
 using Matchly.Interfaces;
+using Matchly.Middlewares;
 using Matchly.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,9 @@ namespace Matchly
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 //app.MapOpenApi();

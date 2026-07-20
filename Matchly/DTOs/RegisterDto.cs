@@ -4,9 +4,11 @@ namespace Matchly.DTOs
 {
     public class RegisterDto
     {
-        [Required(ErrorMessage = "Username must be entered")]
+        [Required]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "Password must be entered")]
+
+        [Required]
+        [StringLength(8, MinimumLength = 4)]
         public string Password { get; set; }
     }
 }
