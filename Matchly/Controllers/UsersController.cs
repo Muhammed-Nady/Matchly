@@ -1,5 +1,8 @@
-﻿using Matchly.Data;
+﻿using AutoMapper;
+using Matchly.Data;
+using Matchly.DTOs;
 using Matchly.Entities;
+using Matchly.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,24 +10,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Matchly.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly AppDbContext _context;
-        public UsersController(AppDbContext context)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            _context = context;
-        }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
-        {
-            return await _context.Users.ToListAsync();
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            return await _context.Users.FindAsync(id);
+            var users = await _userRepository.GetUsersAsync();
+            return Ok(_mapper.Map<IEnumerable<MemberDto>>(users));
+        }
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult<MemberDto>> GetUser(string username)
+        {
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+            return _mapper.Map<MemberDto>(user);
         }
     }
     

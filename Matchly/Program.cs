@@ -1,4 +1,5 @@
 using Matchly.Data;
+using Matchly.Data.Repositories;
 using Matchly.Interfaces;
 using Matchly.Middlewares;
 using Matchly.Services;
@@ -11,7 +12,7 @@ namespace Matchly
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ namespace Matchly
                                     ValidateAudience = false
                                 };
                             });
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
@@ -64,11 +67,25 @@ namespace Matchly
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
+                       .AllowAnyMethod() 
                        .AllowAnyHeader();
             });
 
             app.MapControllers();
+
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var context = services.GetRequiredService<AppDbContext>();
+                await context.Database.MigrateAsync();
+                await Seed.SeedUsers(context);
+            }
+            catch (Exception ex) {
+                var logger = services.GetService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred during migration");
+            }
 
             app.Run();
         }
