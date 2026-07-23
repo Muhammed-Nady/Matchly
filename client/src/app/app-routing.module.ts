@@ -15,15 +15,11 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'members', component: MemberListComponent },
-      { path: 'members/:id', component: MemberDetailComponent },
+      { path: 'members/:username', component: MemberDetailComponent }, // <-- Change :id to :username
       { path: 'lists', component: ListsComponent },
       { path: 'messages', component: MessagesComponent }
     ]
   },
-  { path: 'members', component: MemberListComponent },
-  { path: 'members/:id', component: MemberDetailComponent },
-  { path: 'lists', component: ListsComponent },
-  { path: 'messages', component: MessagesComponent },
   { path: '**', component: HomeComponent, pathMatch: 'full' }
 ];
 

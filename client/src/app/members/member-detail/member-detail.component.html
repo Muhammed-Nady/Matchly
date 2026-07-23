@@ -1,1 +1,72 @@
-<p>member-detail works!</p>
+<div class="row" *ngIf="member">
+    <div class="col-4">
+        <div class="card">
+            <img src="{{member.mainPhotoUrl || './assets/user.png'}}" alt="{{member.knownAs}}"
+                class="card-img-top img-thumbnail">
+            <div class="card-body">
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{member.city}}, {{member.country}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{member.age}}</p>
+                </div>
+                <div>
+                    <strong>Last Active:</strong>
+                    <p>{{member.lastActive | date: 'dd MMM yyyy'}}</p>
+                </div>
+                <div>
+                    <strong>Member since:</strong>
+                    <p>{{member.created | date: 'dd MMM yyyy'}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary me-2">
+                        <i class="bi bi-heart-fill me-1"></i> Like
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="bi bi-envelope-fill me-1"></i> Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading="About {{member.knownAs}}">
+                <div class="tab-content-wrapper">
+                    <h4>Description</h4>
+                    <p>{{member.introduction || 'No description provided yet.'}}</p>
+                    <h4 class="mt-4">Looking for</h4>
+                    <p>{{member.lookingFor || 'No details specified.'}}</p>
+                </div>
+            </tab>
+            <tab heading="Interests">
+                <div class="tab-content-wrapper">
+                    <h4>Interests</h4>
+                    <p>{{member.interests || 'No interests listed.'}}</p>
+                </div>
+            </tab>
+            <tab heading="Photos">
+                <div class="tab-content-wrapper">
+                    <div class="row g-3" *ngIf="member.photos && member.photos.length > 0">
+                        <div class="col-4" *ngFor="let photo of member.photos">
+                            <div class="photo-card">
+                                <img src="{{photo.url}}" alt="Photo of {{member.knownAs}}" class="img-fluid rounded photo-img">
+                            </div>
+                        </div>
+                    </div>
+                    <p *ngIf="!member.photos || member.photos.length === 0" class="text-muted">No photos uploaded yet.</p>
+                </div>
+            </tab>
+            <tab heading="Messages">
+                <div class="tab-content-wrapper">
+                    <p>Messages will go here</p>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>

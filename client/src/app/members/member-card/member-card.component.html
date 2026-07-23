@@ -1,0 +1,31 @@
+<div class="card mb-4 member-card" *ngIf="member">
+    <div class="card-img-wrapper">
+        <img src="{{member.mainPhotoUrl || './assets/user.png'}}" alt="{{member.knownAs}}" class="card-img-top">
+        <ul class="list-inline member-icons animate text-center">
+            <li class="list-inline-item">
+                <button class="btn btn-primary" routerLink="/members/{{member.userName}}">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+            </li>
+            <li class="list-inline-item">
+                <button (click)="addLike(member)" class="btn btn-primary">
+                    <i class="bi bi-heart-fill"></i>
+                </button>
+            </li>
+            <li class="list-inline-item">
+                <button class="btn btn-primary" routerLink="/members/{{member.userName}}" [queryParams]="{tab: 'Messages'}">
+                    <i class="bi bi-envelope-fill"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body p-2">
+        <h6 class="card-title text-center mb-1">
+            <i class="bi bi-person-fill me-1 text-primary"></i>
+            {{member.knownAs}}, {{member.age}}
+        </h6>
+        <p class="card-text text-muted text-center small mb-0">
+            <i class="bi bi-geo-alt-fill me-1 text-danger"></i>{{member.city}}
+        </p>
+    </div>
+</div>
